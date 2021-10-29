@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='styles/codeHighlight.css') }}"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+      $(function () {
+        $("#header").load("/header");
+      });
+    </script>
+    <title>BST Insertion</title>
+
+    <style>
+      svg {
+        display: block;
+        margin: auto;
+      }
+
+      .node circle {
+        fill: rgb(247, 193, 193);
+        stroke: steelblue;
+        stroke-width: 3px;
+      }
+
+      .node text {
+        font: 12px sans-serif;
+      }
+
+      .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+      }
+
+      .customHidden {
+        stroke: rgba(0, 0, 0, 0.1);
+      }
+      .node.customHidden {
+        fill: rgba(0, 0, 0, 0.1) !important;
+        stroke: rgba(0, 0, 0, 0.1);
+      }
+
+      .invisibleDiv {
+        visibility: hidden;
+      }
+
+      .treeBox {
+        border: 2px solid #93dae5;
+        border-radius: 5px;
+        padding-top: 1rem;
+        margin: 2rem 2rem;
+      }
+
+      .wrapper {
+        display: flex;
+        flex-direction: row;
+        margin-top: 5rem;
+      }
+      #codeBox {
+        margin: 2rem 0 0 0rem;
+      }
+    </style>
+  </head>
+
+  <!--References: http://alexkatz.me/posts/binary-search-tree/-->
+
+  <body>
+    <div id="header"></div>
+
+    <div class="wrapper">
+      <div class="container treeBox" style="width: 90%">
+        <div class="row">
+          <div id="BSTree_prev" class="col-xs-6 col-sm-6 col-md-6"></div>
+          <div id="arrow"></div>
+          <div
+            id="BSTree_next"
+            class="col-xs-6 col-sm-6 col-md-6 invisibleDiv"
+          ></div>
+        </div>
+        <div class="row">
+          <div id="BSTree_prev" class="text-center col-xs-6 col-sm-6 col-md-6">
+            Current Tree
+          </div>
+          <div id="BSTree_next" class="text-center col-xs-6 col-sm-6 col-md-6">
+            Tree After Insertion
+          </div>
+        </div>
+        <div
+          id="prevNextBtnDiv"
+          class="text-center invisibleDiv"
+          style="margin: auto; margin-bottom: 1rem"
+        >
+          <button
+            id="prevBtn"
+            class="btn btn-primary"
+            style="margin-right: 2rem"
+          >
+            Prev
+          </button>
+
+          <button id="nextBtn" class="btn btn-primary">Next</button>
+        </div>
+      </div>
+      <div id="codeBox" class="code-container">
+        <div id="code-line-1" class="code">insert(node, root)</div>
+        <div id="code-line-2" class="code code-indent">if (root == null)</div>
+        <div id="code-line-3" class="code code-double-indent">
+          root = node; return root
+        </div>
+        <div id="code-line-4" class="code code-indent">
+          if (node.value == root.value)
+        </div>
+        <div id="code-line-5" class="code code-double-indent">
+          return "present"
+        </div>
+        <div id="code-line-6" class="code code-indent">
+          else if(node.value < root.value)
+        </div>
+        <div id="code-line-7" class="code code-double-indent">
+          if (root.left != null)
+        </div>
+        <div id="code-line-8" class="code code-triple-indent">
+          return insert(node, root.left)
+        </div>
+        <div id="code-line-9" class="code code-double-indent">else</div>
+        <div id="code-line-10" class="code code-triple-indent">
+          root.left = node
+        </div>
+
+        <div id="code-line-11" class="code code-indent">
+          else // (node.value > root.value)
+        </div>
+        <div id="code-line-12" class="code code-double-indent">
+          if (root.right != null)
+        </div>
+        <div id="code-line-13" class="code code-triple-indent">
+          return insert(node, root.right)
+        </div>
+        <div id="code-line-14" class="code code-double-indent">else</div>
+        <div id="code-line-15" class="code code-triple-indent">
+          root.right = node
+        </div>
+        <div id="code-line-16" class="code code-indent">return root</div>
+      </div>
+    </div>
+    <div class="container" id="addNewNode">
+      <div class="form-inline">
+        <input
+          id="nodeInput"
+          class="form-control mr-1"
+          placeholder="Add a node"
+        />
+        <button id="insertBtn" class="btn btn-primary">Insert</button>
+        <button id="finishBtn" class="btn btn-primary">Finish</button>
+      </div>
+      <span
+        class="validity"
+        style="color: rgb(243, 91, 91); font-size: medium"
+      ></span>
+    </div>
+  </body>
+</html>
+<!-- load the d3.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.2/d3.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  function highlightCodeLine(lineNo) {
+    $(".code").removeClass("code-highlight");
+    $("#code-line-" + lineNo).addClass("code-highlight");
+  }
+  class Node {
+    constructor(value) {
+      this.value = value;
+      this.parent = null;
+      this.left = null;
+      this.right = null;
+    }
+  }
+
+  class BinarySearchTree {
+    constructor(node) {
+      this.root = node;
+    }
+
+    // Insert Node
+    insert(node, root) {
+      if (node.value == root.value) {
+        return "present";
+      } else if (node.value < root.value) {
+        // check if left subtree is null
+        if (root.left != null) {
+          return this.insert(node, root.left);
+        } else {
+          root.left = node;
+          node.parent = root;
+          return root;
+        }
+      } else {
+        // check if right subtree is null
+        if (root.right != null) {
+          return this.insert(node, root.right);
+        } else {
+          root.right = node;
+          node.parent = root;
+          return root;
+        }
+      }
+    }
+    
+    search(key, root, pathTraversed) {
+      if (root == null) {
+        return pathTraversed;
+      }
+      if (key == root.value) {
+        pathTraversed.push(root.value);
+        return pathTraversed;
+      } else if (key < root.value) {
+        pathTraversed.push(root.value);
+        return this.search(key, root.left, pathTraversed);
+      } else {
+        pathTraversed.push(root.value);
+        return this.search(key, root.right, pathTraversed);
+      }
+    }
+  }
+
+  function myXOR(a, b) {
+    return (a || b) && !(a && b);
+  }
+
+  var tree = null;
+  var nullCounter = 0;
+  // Set dimensions and margins for diagram
+  var margin = { top: 40, bottom: 80 },
+    width = 400,
+    height = 400 - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  // appends a 'group' element to 'svg'
+  // moves the 'group' element to the top left margin
+
+  var svg = d3
+    .select("#BSTree_next")
+    .append("svg")
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", "0 0 400 400")
+    .append("g")
+    .attr("transform", "translate(0," + margin.top + ")");
+  // Declares a tree layout and assigns the size
+  var treemap = d3.tree().size([width, height]);
+  // Main Program
+  function makeTree(number, begin = false) {
+    let parent;
+    if (begin) {
+      var node = new Node(number);
+      tree = new BinarySearchTree(node);
+    } else {
+      parent = tree.insert(new Node(number), tree.root);
+    }
+    var i = 0,
+      duration = 1000,
+      root;
+
+    // Assigns parent, children, height, depth, and coordinates
+    var myroot = tree.root;
+    if (parent != null) {
+      myroot = parent;
+    }
+    root = d3.hierarchy(tree.root, function (d) {
+      d.children = [];
+      if (d.left) {
+        d.children.push(d.left);
+        if (myXOR(d.left, d.right)) {
+          d.children.push(new Node("null"));
+          nullCounter += 1;
+        }
+      }
+      if (d.right) {
+        if (myXOR(d.left, d.right)) {
+          d.children.push(new Node("null"));
+          nullCounter += 1;
+        }
+        d.children.push(d.right);
+      }
+      return d.children;
+    });
+
+    root.x0 = width / 2;
+    root.y0 = 0;
+
+    update(root);
+
+    // Collapse the node and all it's children
+    function collapse(d) {
+      if (d.children) {
+        d._children = d.children;
+        d._children.forEach(collapse);
+        d.children = null;
+      }
+    }
+
+    // Update
+    function update(source) {
+      // Assigns the x and y position for the nodes
+      var treeData = treemap(root);
+
+      // Compute the new tree layout.
+      var nodes = treeData.descendants(),
+        links = treeData.descendants().slice(1);
+
+      // Normalize for fixed-depth
+      nodes.forEach(function (d) {
+        d.y = d.depth * 100;
+      });
+
+      // **************** Nodes Section ****************
+
+      // Update the nodes...
+      var node = svg.selectAll("g.node").data(nodes, function (d) {
+        return d.id || (d.id = d.value);
+      });
+
+      // Enter any new nodes at the parent's previous position.
+      var nodeEnter = node
+        .enter()
+        .append("g")
+        .attr("class", "node")
+        .attr("transform", function (d) {
+          return "translate(" + source.x0 + "," + source.y0 + ")";
+        });
+
+      // Add Circle for the nodes
+      nodeEnter
+        .append("circle")
+        .attr("class", function (d) {
+          if (isNaN(d.value)) {
+            return "node customHidden";
+          }
+          return "node";
+        })
+        .attr("id", function (d) {
+          return d.value;
+        })
+        .attr("r", 1e-6)
+        .attr("fill", function (d) {
+          return d._children ? "pink" : "yellow";
+        });
+
+      // Add labels for the nodes
+      nodeEnter
+        .append("text")
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+          return d.data.value;
+        });
+
+      nodeEnter
+        .append("text")
+        .attr("dy", "-2.5em")
+        .attr("id", function (d) {
+          if (d.data.value == "null") return "null";
+          else return d.id + "_text";
+        })
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+          return "";
+        });
+
+      // Update
+      var nodeUpdate = nodeEnter.merge(node);
+
+      // Transition to the proper position for the nodes
+      nodeUpdate
+        .transition()
+        .duration(500)
+        .attr("transform", function (d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        });
+
+      // Update the node attributes and style
+      nodeUpdate
+        .select("circle.node")
+        .attr("r", 20)
+        .attr("fill", function (d) {
+          return d._children ? "pink" : "yellow";
+        })
+        .attr("cursor", "pointer");
+
+      // Remove any exiting nodes
+      nodeExit = node
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr("transform", function (d) {
+          return "translate(" + source.x + "," + source.y + ")";
+        })
+        .remove();
+
+      // On exit reduce the node circles size to 0
+      nodeExit.select("circle").attr("r", 1e-6);
+
+      // On exit reduce the opacity of text lables
+      nodeExit.select("text").style("fill-opacity", 1e-6);
+
+      // **************** Links Section ****************
+
+      // Update the links
+      var link = svg.selectAll("path.link").data(links, function (d) {
+        return d.id;
+      });
+
+      // Enter any new links at the parent's previous position
+      var linkEnter = link
+        .enter()
+        .insert("path", "g")
+        .attr("class", function (d) {
+          if (isNaN(d.value)) {
+            return "link customHidden ";
+          }
+          return "link";
+        })
+        .attr("d", function (d) {
+          var o = { x: source.x0, y: source.y0 };
+          return diagonal(o, o);
+        });
+
+      // Update
+      var linkUpdate = linkEnter.merge(link);
+
+      // Transition back to the parent element position
+      linkUpdate
+        .transition()
+        .duration(duration)
+        .attr("d", function (d) {
+          return diagonal(d, d.parent);
+        });
+
+      // Remove any existing links
+      var linkExit = link
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr("d", function (d) {
+          var o = { x: source.x, y: source.y };
+        })
+        .remove();
+
+      // Store the old positions for transition.
+      nodes.forEach(function (d) {
+        d.x0 = d.x;
+        d.y0 = d.y;
+      });
+
+      // Create a curved (diagonal) path from parent to the child nodes
+      function diagonal(s, d) {
+        path = `M ${s.x} ${s.y}
+            C ${(s.x + d.x) / 2} ${s.y},
+              ${(s.x + d.x) / 2} ${d.y},
+              ${d.x} ${d.y}`;
+
+        return path;
+      }
+
+      // Toggle children on click
+      function click(d) {
+        if (d.children) {
+          d._children = d.children;
+          d.children = null;
+        } else {
+          d.children = d._children;
+          d._children = null;
+        }
+        update(d);
+      }
+    }
+  }
+
+  function changeColor(id, color) {
+    let node = "#" + id;
+    $("#BSTree_prev").find(node).css({ fill: color });
+  }
+
+  function colorSearchedNodes(path, color) {
+    let n = path.length;
+    console.log(path);
+    let colorDuration = 1000;
+
+    for (let i = 0; i < n; i++) {
+      p = p
+        .then(() => delay(colorDuration))
+        .then(() => changeColor(path[i], color));
+    }
+  }
+
+  var stack_prev = [];
+  var stack_next = [];
+  var num_i = 0;
+  var numbers = [];
+  let nodeDuration = 1000;
+  let colorDuration = 1000;
+  let searchPath;
+  var initialTree = 0;
+  var prevBSTree, nextBSTree;
+
+  function getPath(key) {
+    searchPath = tree.search(key, tree.root, []);
+  }
+
+  if (numbers.length > 0) {
+    makeTree(numbers[num_i], (begin = true));
+    initial = 1;
+  }
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  for (let num_i = 1, p = Promise.resolve(); num_i < numbers.length; num_i++) {
+    p = p
+      .then(() => delay(nodeDuration))
+      .then(() => getPath(numbers[num_i]))
+      .then(() => {
+        for (let j = 0, pj = Promise.resolve(); j < searchPath.length; j++) {
+          pj = pj
+            .then(() => delay(colorDuration))
+            .then(() => changeColor(searchPath[j], "red"));
+        }
+      })
+      .then(() => delay(nodeDuration * 2))
+      .then(() => {
+        for (let j = 0, pj = Promise.resolve(); j < searchPath.length; j++) {
+          pj = pj
+            .then(() => delay(colorDuration))
+            .then(() => changeColor(searchPath[j], "white"));
+        }
+      })
+      .then(() => delay(nodeDuration * 2))
+      .then(() => makeTree(numbers[num_i]));
+  }
+
+  function isNumeric(obj) {
+    var realStringObj = obj && obj.toString();
+    return (
+      !jQuery.isArray(obj) && realStringObj - parseFloat(realStringObj) + 1 >= 0
+    );
+  }
+
+  function validate(num) {
+    if (isNumeric(num)) {
+      getPath(num);
+      console.log(searchPath);
+      for (let i = 0; i < searchPath.length; i++)
+        if (searchPath[i] == num) return "Already present";
+      return "ok";
+    } else {
+      return "Invalid number";
+    }
+  }
+
+  var prevNextBtnsSet = 0;
+  var finalsvg;
+  var highlightDuration = 750;
+  $("#insertBtn").on("click", function () {
+    $(".btn").attr("disabled", "disabled");
+    if ($("#insertBtn").text() == "Restart") {
+      initialTree = 0;
+      stack_prev = [];
+      stack_next = [];
+      d3.select("#BSTree_next").select("svg").remove();
+      d3.select("#BSTree_prev").select("svg").remove();
+      $("#insertBtn").text("Insert");
+      svg = d3
+        .select("#BSTree_next")
+        .append("svg")
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", "0 0 400 400")
+        .append("g")
+        .attr("transform", "translate(0," + margin.top + ")");
+    }
+
+    let num = $("#nodeInput").val();
+    if (initialTree == 0) {
+      if (isNumeric(num)) {
+        $(".validity").text("");
+        num = num * 1;
+        initialTree = 1;
+        let p = Promise.resolve();
+
+        p.then(() => highlightCodeLine(2))
+          .then(() => delay(highlightDuration))
+          .then(() => highlightCodeLine(3))
+          .then(() => delay(highlightDuration))
+          .then(() => {
+            makeTree(num, (begin = true));
+            $("#BSTree_next").addClass("invisibleDiv");
+            $("#prevNextBtnDiv").addClass("invisibleDiv");
+            $("#finishBtn").removeAttr("disabled");
+
+            d3.select("#BSTree_prev").select("svg").remove();
+            $("#BSTree_next svg").clone().appendTo($("#BSTree_prev"));
+            finalsvg = $("#BSTree_next svg").clone();
+
+            // make and arrow;
+            prevBSTree = Object.assign(
+              Object.create(Object.getPrototypeOf(tree)),
+              tree
+            );
+            nextBSTree = Object.assign(
+              Object.create(Object.getPrototypeOf(tree)),
+              tree
+            );
+            $(".btn").removeAttr("disabled");
+          });
+      } else {
+        $(".validity").text(validate(num));
+        $(".btn").removeAttr("disabled");
+      }
+    } else {
+      // After 1st Node --> Tree is not Null
+      let msg = validate(num);
+
+      if (msg == "ok") {
+        $(".validity").text("");
+
+        // Int conversion
+        num = num * 1;
+        // search in prev svg
+
+        // push next svg to prev svg
+        stack_prev.push([
+          $("#BSTree_prev svg").clone(),
+          Object.assign(
+            Object.create(Object.getPrototypeOf(prevBSTree)),
+            prevBSTree
+          ),
+        ]);
+        d3.select("#BSTree_prev").select("svg").remove();
+        $("#BSTree_next svg").clone().appendTo($("#BSTree_prev"));
+        prevBSTree = Object.assign(
+          Object.create(Object.getPrototypeOf(nextBSTree)),
+          nextBSTree
+        );
+
+        var left = $("#BSTree_prev").offset().left; // Get the calculated left position
+
+        $("#BSTree_prev")
+          .css({ left: left }) // Set the left to its calculated position
+          .animate({ left: "0px" }, "slow");
+
+        // wait till coloring
+        let p = Promise.resolve();
+        p.then(() => highlightCodeLine(2))
+          .then(() => delay(highlightDuration))
+          .then(() => highlightCodeLine(4))
+          .then(() => {
+            $("#BSTree_next").addClass("invisibleDiv");
+          })
+          .then(() => getPath(num)) // list of nodes to be highlighted
+          .then(() => {
+            for (
+              let j = 0, pj = Promise.resolve();
+              j < searchPath.length;
+              j++
+            ) {
+              pj = pj
+                .then(() => highlightCodeLine(6))
+                .then(() => delay(highlightDuration))
+                .then(() => {
+                  changeColor(searchPath[j], "red");
+                  if (num < searchPath[j]) {
+                    let promiseCode = Promise.resolve();
+                    promiseCode
+                      .then(() => {
+                        $("#BSTree_prev")
+                          .find("#" + searchPath[j] + "_text")
+                          .text("Go Left");
+                      })
+                      .then(() => highlightCodeLine(7))
+                      .then(() => delay(highlightDuration))
+                      .then(() => {
+                        if (j == searchPath.length - 1) {
+                          highlightCodeLine(10);
+                        } else {
+                          highlightCodeLine(8);
+                        }
+                      })
+                      .then(() => delay(highlightDuration));
+                  } else {
+                    let promiseCode = Promise.resolve();
+                    promiseCode
+                      .then(() => {
+                        $("#BSTree_prev")
+                          .find("#" + searchPath[j] + "_text")
+                          .text("Go Right");
+                      })
+                      .then(() => highlightCodeLine(12))
+                      .then(() => delay(highlightDuration))
+                      .then(() => {
+                        if (j == searchPath.length - 1) {
+                          highlightCodeLine(15);
+                        } else {
+                          highlightCodeLine(13);
+                        }
+                      })
+                      .then(() => delay(highlightDuration));
+                  }
+                });
+            }
+          })
+          .then(() => {
+            $("#BSTree_next").removeClass("invisibleDiv");
+          })
+          .then(() => delay(nodeDuration * 4))
+          .then(() => makeTree(num))
+          .then(() => {
+            // clear next stack after each insertion
+            stack_next = [];
+
+            nextBSTree = Object.assign(
+              Object.create(Object.getPrototypeOf(tree)),
+              tree
+            );
+            finalsvg = $("#BSTree_next svg").clone();
+            $(".btn").removeAttr("disabled");
+          });
+      } else {
+        if (msg == "Invalid number") {
+          $(".validity").text(msg);
+          $("#insertBtn").removeAttr("disabled");
+          $(".btn").removeAttr("disabled");
+        } else {
+          let promiseCode = Promise.resolve();
+          promiseCode
+            .then(() => highlightCodeLine(2))
+            .then(() => delay(highlightDuration))
+            .then(() => highlightCodeLine(4))
+            .then(() => delay(highlightDuration))
+            .then(() => {
+              if (msg == "Already present") {
+                highlightCodeLine(5);
+              }
+            })
+            .then(() => {
+              $(".validity").text(msg);
+              $("#insertBtn").removeAttr("disabled");
+              $(".btn").removeAttr("disabled");
+            });
+        }
+      }
+    }
+
+    disablePrevNextBtns();
+  });
+
+  function disablePrevNextBtns() {
+    if (stack_next.length == 0) {
+      $("#nextBtn").attr("disabled", "disabled");
+    } else {
+      $("#nextBtn").removeAttr("disabled");
+    }
+    if (stack_prev.length == 0) {
+      $("#prevBtn").attr("disabled", "disabled");
+    } else {
+      $("#prevBtn").removeAttr("disabled");
+    }
+  }
+
+  $(document).ready(function () {
+    disablePrevNextBtns();
+  });
+
+  $("#prevBtn").on("click", function () {
+    // push next svg onto stack
+    prevNextBtnsSet = 1;
+    stack_next.push([
+      $("#BSTree_next svg").clone(),
+      Object.assign(Object.create(Object.getPrototypeOf(tree)), tree),
+    ]);
+
+    //Remove svg from next and clone prev svg to next svg
+    d3.select("#BSTree_next").select("svg").remove();
+    $("#BSTree_prev svg").clone().appendTo($("#BSTree_next"));
+    nextBSTree = Object.assign(
+      Object.create(Object.getPrototypeOf(prevBSTree)),
+      prevBSTree
+    );
+
+    //Remove svg from prev, pop from previous stack, and load onto prev svg
+    d3.select("#BSTree_prev").select("svg").remove();
+    let svg_tree = stack_prev.pop();
+    svg_tree[0].appendTo($("#BSTree_prev"));
+    prevBSTree = Object.assign(
+      Object.create(Object.getPrototypeOf(svg_tree[1])),
+      svg_tree[1]
+    );
+    disablePrevNextBtns();
+  });
+
+  $("#nextBtn").on("click", function () {
+    // push prev svg onto stack
+    prevNextBtnsSet = 1;
+    stack_prev.push([
+      $("#BSTree_prev svg").clone(),
+      Object.assign(
+        Object.create(Object.getPrototypeOf(prevBSTree)),
+        prevBSTree
+      ),
+    ]);
+
+    //Remove svg from prev and clone next svg to prev svg
+    d3.select("#BSTree_prev").select("svg").remove();
+    $("#BSTree_next svg").clone().appendTo($("#BSTree_prev"));
+    prevBSTree = Object.assign(
+      Object.create(Object.getPrototypeOf(nextBSTree)),
+      nextBSTree
+    );
+
+    //Remove svg from next, pop from next stack, and load onto next svg
+    d3.select("#BSTree_next").select("svg").remove();
+    let svg_tree = stack_next.pop();
+    svg_tree[0].appendTo($("#BSTree_next"));
+    nextBSTree = Object.assign(
+      Object.create(Object.getPrototypeOf(svg_tree[1])),
+      svg_tree[1]
+    );
+    disablePrevNextBtns();
+  });
+
+  $("#finishBtn").on("click", function () {
+    $(".validity").text("");
+    stack_next.push([$("#BSTree_next svg").clone(), ""]);
+    stack_next.push([$("#BSTree_prev svg").clone(), ""]);
+    while (stack_prev.length != 0) {
+      stack_next.push(stack_prev.pop());
+    }
+    disablePrevNextBtns();
+    d3.select("#BSTree_prev").select("svg").remove();
+    stack_next.pop()[0].appendTo($("#BSTree_prev"));
+    disablePrevNextBtns();
+    d3.select("#BSTree_next").select("svg").remove();
+    stack_next.pop()[0].appendTo($("#BSTree_next"));
+    disablePrevNextBtns();
+    $("#prevNextBtnDiv").removeClass("invisibleDiv");
+    $("#finishBtn").attr("disabled", "disabled");
+    $("#insertBtn").text("Restart");
+  });
+</script>

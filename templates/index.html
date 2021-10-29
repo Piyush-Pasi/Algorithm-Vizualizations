@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      href="{{ url_for('static',filename='styles/index.css') }}"
+      rel="stylesheet"
+    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+      $(function () {
+        $("#header").load("/header");
+      });
+    </script>
+  </head>
+  <body>
+    <div id="header"></div>
+    <section class="wrapper">
+      <div class="container-fostrap">
+        <div style="margin-top: 7rem">
+          <img
+            src="{{ url_for('static',filename='img/logo.png') }}"
+            class="fostrap-logo"
+            style="width: 200px"
+          />
+        </div>
+        <div class="content">
+          <div class="container">
+            <div class="row">
+              <div class="col-xs-12 col-sm-4">
+                <div class="card">
+                  <a class="img-card" href="/linkedlist">
+                    <img
+                      class="fit-image"
+                      src="{{ url_for('static',filename='img/cartoonLinkedList.png') }}"
+                    />
+                  </a>
+                  <div class="card-content">
+                    <h4 class="card-title">
+                      <a href="/linkedlist"> Linked List Reversal </a>
+                    </h4>
+                  </div>
+                  <div class="card-read-more">
+                    <a href="/linkedlist" class="btn btn-link btn-block">
+                      Read More
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4">
+                <div class="card">
+                  <a class="img-card" href="/newdijkstra">
+                    <img
+                      class="fit-image"
+                      src="{{ url_for('static',filename='img/Dijkstra_Animation.gif') }}"
+                    />
+                  </a>
+                  <div class="card-content">
+                    <h4 class="card-title">
+                      <a href="/newdijkstra">
+                        Dijkstra Single Source Shortest Path
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="card-read-more">
+                    <a href="/newdijkstra" class="btn btn-link btn-block">
+                      Read More
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4">
+                <div class="card">
+                  <a class="img-card" href="/BST-Insertion">
+                    <img
+                      class="fit-image"
+                      src="{{ url_for('static',filename='img/bst.png') }}"
+                    />
+                  </a>
+                  <div class="card-content">
+                    <h4 class="card-title">
+                      <a href="/BST-Insertion">
+                        Binary Search Tree Insertion
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="card-read-more">
+                    <a href="/BST-Insertion"> Read More </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

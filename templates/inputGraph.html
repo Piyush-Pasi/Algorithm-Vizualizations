@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dijkstra Visualization</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <!-- <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='styles/codeHighlight.css') }}"
+    /> -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- <script src="{{ url_for('static',filename='js/dijkstra.js') }}"></script> -->
+    <script>
+      $(function () {
+        $("#header").load("/header");
+      });
+    </script>
+    <style>
+      .node {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 3px;
+      }
+      /* edge */
+      .link {
+        stroke: steelblue;
+        stroke-width: 2px;
+      }
+      .form-inline {
+        display: flex;
+        flex-direction: column;
+        margin: 0.5rem 0;
+      }
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        margin-top: 4%;
+      }
+      .main-container {
+        display: flex;
+        flex-direction: row;
+      }
+      .formInputs {
+        margin: 0 1rem;
+        margin-right: 50px;
+        display: flex;
+        flex-direction: row;
+      }
+      .input-group {
+        padding: 5px;
+        margin-top: 5px;
+      }
+      #graph-div {
+        padding: 5px;
+        margin: 0px 20px 0px 10px;
+        border: 1px solid blue;
+        width: 40%;
+      }
+      #heap-div {
+        padding: 5px;
+        margin-right: 20px;
+        border: 1px solid blue;
+        width: 40%;
+      }
+      .code-container {
+        width: 20%;
+        font-size: 13px;
+        padding: 5px;
+        margin-left: 10px;
+      }
+      .code-container {
+        overflow: hidden;
+        margin-left: 10px;
+        font-family: Courier New, monospace;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .code {
+        border-radius: 5px;
+        padding: 3px;
+      }
+      .code-indent {
+        margin-left: 30px;
+      }
+      .code-double-indent {
+        margin-left: 60px;
+      }
+      .code-triple-indent {
+        margin-left: 90px;
+      }
+      .code-four-indent {
+        margin-left: 120px;
+      }
+      .code-highlight {
+        background-color: rgb(160, 103, 19);
+        transition-duration: 1s;
+      }
+
+      /* Heap SVG Styles */
+      .heapNode circle {
+        fill: rgb(247, 193, 193);
+        stroke: steelblue;
+        stroke-width: 3px;
+      }
+
+      .heapNode text {
+        font: 12px sans-serif;
+      }
+
+      .heapLink {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+      }
+
+      .customHidden {
+        stroke: rgba(0, 0, 0, 0.1);
+      }
+      .heapNode .customHidden {
+        fill: rgba(0, 0, 0, 0.1) !important;
+        stroke: rgba(0, 0, 0, 0.1);
+      }
+
+      .invisibleDiv {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="header"></div>
+    <div class="wrapper">
+      <div class="main-container">
+        <!---Graph Div-->
+        <div id="graph-div"></div>
+
+        <div id="heap-div"></div>
+
+        <div id="codeBox" class="code-container">
+          <div id="code-line-1" class="code">
+            function Dijkstra(Graph, source):
+          </div>
+          <div id="code-line-2" class="code code-indent">
+            create vertex set Q
+          </div>
+
+          <div id="code-line-3" class="code code-indent">
+            for each vertex v in Graph:
+          </div>
+          <div id="code-line-4" class="code code-double-indent">
+            dist[v] ← INFINITY
+          </div>
+          <div id="code-line-5" class="code code-double-indent">
+            prev[v] ← UNDEFINED
+          </div>
+          <div id="code-line-6" class="code code-double-indent">add v to Q</div>
+          <div id="code-line-7" class="code code-indent">dist[source] ← 0</div>
+
+          <div id="code-line-8" class="code code-indent">
+            while Q is not empty:
+          </div>
+          <div id="code-line-9" class="code code-double-indent">
+            u ← vertex in Q with min dist[u]
+          </div>
+
+          <div id="code-line-10" class="code code-double-indent">
+            remove u from Q
+          </div>
+
+          <div id="code-line-11" class="code code-double-indent">
+            for each neighbor v of u still in Q:
+          </div>
+          <div id="code-line-12" class="code code-triple-indent">
+            alt ← dist[u] + length(u, v)
+          </div>
+          <div id="code-line-13" class="code code-triple-indent">
+            if alt &lt; dist[v]:
+          </div>
+          <div id="code-line-14" class="code code-four-indent">
+            dist[v] ← alt
+          </div>
+          <div id="code-line-15" class="code code-four-indent">prev[v] ← u</div>
+          <div id="code-line-16" class="code code-indent">
+            return dist[], prev[]
+          </div>
+        </div>
+      </div>
+
+      <div class="formInputs">
+        <div style="display: flex; flex-direction: column">
+          <div class="input-group">
+            <input
+              id="nodeInput"
+              class="form-control mr-1"
+              placeholder="Node name"
+            />
+          </div>
+          <div class="input-group">
+            <button id="insertNodeBtn" class="btn btn-primary">Add Node</button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column">
+          <div class="input-group">
+            <input
+              id="edgeWeight"
+              class="form-control mr-1"
+              placeholder="Edge weight"
+            />
+          </div>
+          <div class="input-group">
+            <input
+              id="edgeSource"
+              class="form-control mr-1"
+              placeholder="Source"
+            />
+          </div>
+          <div class="input-group">
+            <input
+              id="edgeTarget"
+              class="form-control mr-1"
+              placeholder="Target"
+            />
+          </div>
+          <div class="input-group">
+            <button id="insertEdgeBtn" class="btn btn-primary">Add Edge</button>
+          </div>
+          <div><span id="validity"></span></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script>
+  d3version3 = d3;
+  window.d3 = null;
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.2/d3.min.js"></script>
+<script>
+  d3version4 = d3;
+  window.d3 = null;
+  console.log("v3", d3version3.version);
+  console.log("v4", d3version4.version);
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  class MinHeap {
+    constructor() {
+      this.values = [];
+    }
+    add(element) {
+      this.values.push(element);
+      let index = this.values.length - 1;
+      const current = this.values[index];
+
+      while (index > 0) {
+        let parentIndex = Math.floor((index - 1) / 2);
+        let parent = this.values[parentIndex];
+
+        if (parent.value > current.value) {
+          this.values[parentIndex] = current;
+          this.values[index] = parent;
+          index = parentIndex;
+        } else break;
+      }
+    }
+
+    changeValue(key, value) {
+      let newValues = [];
+      while (this.values.length != 0) {
+        let tmp = this.extractMin();
+        if (tmp.key == key) {
+          tmp.value = value;
+        }
+        if (key.hasOwnProperty("name") && tmp.key == key.name) {
+          tmp.value = value;
+        }
+        newValues.push(tmp);
+      }
+      for (let i = 0; i < newValues.length; i++) {
+        this.add(newValues[i]);
+      }
+    }
+
+    extractMin() {
+      const max = this.values[0];
+      if (this.values.length == 1) {
+        this.values = [];
+        return max;
+      }
+      const end = this.values.pop();
+      this.values[0] = end;
+
+      let index = 0;
+      const length = this.values.length;
+
+      const current = this.values[0];
+      while (true) {
+        let leftChildIndex = 2 * index + 1;
+        let rightChildIndex = 2 * index + 2;
+        let leftChild, rightChild;
+        let swap = null;
+
+        if (leftChildIndex < length) {
+          leftChild = this.values[leftChildIndex];
+          if (leftChild.value < current.value) swap = leftChildIndex;
+        }
+        if (rightChildIndex < length) {
+          rightChild = this.values[rightChildIndex];
+          if (
+            (swap === null && rightChild.value < current.value) ||
+            (swap !== null && rightChild.value < leftChild.value)
+          )
+            swap = rightChildIndex;
+        }
+
+        if (swap === null) break;
+        this.values[index] = this.values[swap];
+        this.values[swap] = current;
+        index = swap;
+      }
+
+      return max;
+    }
+  }
+
+  var xyheapy = new MinHeap();
+
+  function myXOR(a, b) {
+    return (a || b) && !(a && b);
+  }
+
+  class Node {
+    constructor(value, name, index) {
+      this.value = value;
+      this.parent = null;
+      this.left = null;
+      this.right = null;
+      this.index = index;
+      this.name = name;
+    }
+  }
+
+  var heapTreeRoot;
+  function makeHeap(hnode, heapNodes, begin = false) {
+    if (begin) {
+      heapTreeRoot = new Node(heapNodes[0].value, heapNodes[0].key, 0);
+      hnode = heapTreeRoot;
+    }
+
+    let child1 = hnode.index * 2 + 1;
+    let child2 = hnode.index * 2 + 2;
+    if (child1 < heapNodes.length) {
+      let newnode = new Node(
+        heapNodes[child1].value,
+        heapNodes[child1].key,
+        child1
+      );
+      hnode.left = newnode;
+      makeHeap(newnode, heapNodes);
+    }
+    if (child2 < heapNodes.length) {
+      let newnode = new Node(
+        heapNodes[child2].value,
+        heapNodes[child2].key,
+        child2
+      );
+      hnode.right = newnode;
+      makeHeap(newnode, heapNodes);
+    }
+  }
+  var minHeap = new MinHeap();
+
+  var margin = { top: 40, bottom: 80 },
+    heap_width = 400,
+    heap_height = 400 - margin.top - margin.bottom;
+
+  function createHeapSVG(number, begin = false) {
+    makeHeap(null, number, true);
+
+    d3version4.select("#heap-div").select("svg").remove();
+    var heap_svg = d3version4
+      .select("#heap-div")
+      .append("svg")
+      .attr("width", heap_width)
+      .attr("height", heap_height + margin.top + margin.bottom)
+      .attr("viewBox", "0 0 400 400")
+      .append("g")
+      .attr("transform", "translate(0," + margin.top + ")");
+
+    var tree = heapTreeRoot;
+    var i = 0,
+      duration = 1000,
+      root;
+    var treemap = d3version4.tree().size([heap_width, heap_height]);
+    //console.log(myroot.value);
+    root = d3version4.hierarchy(tree, function (d) {
+      d.children = [];
+      if (d.left) {
+        d.children.push(d.left);
+        if (myXOR(d.left, d.right)) {
+          d.children.push(new Node("null", "null", -1));
+        }
+      }
+      if (d.right) {
+        if (myXOR(d.left, d.right)) {
+          d.children.push(new Node("null", "null", -1));
+        }
+        d.children.push(d.right);
+      }
+      //console.log(d.children);
+      return d.children;
+    });
+
+    root.x0 = heap_height / 2;
+    root.y0 = 0;
+
+    // Collapse after the second level
+    // root.children.forEach(collapse);
+
+    update(root);
+
+    // Collapse the node and all it's children
+    function collapse(d) {
+      if (d.children) {
+        d._children = d.children;
+        d._children.forEach(collapse);
+        d.children = null;
+      }
+    }
+
+    // Update
+
+    function update(source) {
+      // Assigns the x and y position for the nodes
+      var treeData = treemap(root);
+
+      // Compute the new tree layout.
+      var nodes = treeData.descendants(),
+        links = treeData.descendants().slice(1);
+
+      // Normalize for fixed-depth
+      nodes.forEach(function (d) {
+        d.y = d.depth * 100;
+      });
+
+      // **************** Nodes Section ****************
+
+      // Update the nodes...
+      var node = heap_svg.selectAll("g.heapNode").data(nodes, function (d) {
+        //  if (typeof d == 'undefined' || typeof d.id == 'undefined' || typeof d.value == 'undefined' || isNaN(d.value))
+        //     return "null_nodes";
+        return d.id || (d.id = d.value);
+      });
+
+      // Enter any new nodes at the parent's previous position.
+      var nodeEnter = node
+        .enter()
+        .append("g")
+        .attr("class", " heapNode")
+        .attr("transform", function (d) {
+          return "translate(" + source.x0 + "," + source.y0 + ")";
+        });
+      //.on('click', click);
+
+      // Add Circle for the nodes
+      nodeEnter
+        .append("circle")
+        .attr("class", function (d) {
+          if (isNaN(d.data.value)) {
+            return " heapNode customHidden ";
+          }
+          return " heapNode";
+        })
+        .attr("id", function (d) {
+          return d.data.value;
+        })
+        .attr("name", function (d) {
+          return d.data.name;
+        })
+        .attr("r", 1e-6)
+        .attr("fill", function (d) {
+          return d._children ? "pink" : "yellow";
+        });
+
+      // Add labels for the nodes
+      nodeEnter
+        .append("text")
+        .attr("dy", ".35em")
+        /*.attr("x", function(d){
+                return d.children || d._children ? -13 : -13;
+            })*/
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+          return d.data.value;
+        });
+
+      nodeEnter
+        .append("text")
+        .attr("dy", "-2.5em")
+        .attr("id", function (d) {
+          if (d.data.value == "null") return "null";
+          else return d.id + "_text";
+        })
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+          return d.data.name;
+        });
+
+      // Update
+      var nodeUpdate = nodeEnter.merge(node);
+
+      // Transition to the proper position for the nodes
+      nodeUpdate
+        .transition()
+        .duration(500)
+        .attr("transform", function (d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        });
+
+      // Update the node attributes and style
+      nodeUpdate
+        .select("circle.heapNode")
+        .attr("r", 20)
+        .attr("fill", function (d) {
+          return d._children ? "pink" : "yellow";
+        })
+        .attr("cursor", "pointer");
+
+      // Remove any exiting nodes
+      nodeExit = node
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr("transform", function (d) {
+          return "translate(" + source.x + "," + source.y + ")";
+        })
+        .remove();
+
+      // On exit reduce the node circles size to 0
+      nodeExit.select("circle").attr("r", 1e-6);
+
+      // On exit reduce the opacity of text lables
+      nodeExit.select("text").style("fill-opacity", 1e-6);
+
+      // **************** Links Section ****************
+
+      // Update the links...
+      var link = heap_svg.selectAll("path.heapLink").data(links, function (d) {
+        // if(typeof d == 'undefined') return "null_nodes";
+        return d.id;
+      });
+
+      // Enter any new links at the parent's previous position
+      var linkEnter = link
+        .enter()
+        .insert("path", "g")
+        .attr("class", function (d) {
+          if (isNaN(d.value)) {
+            return " heapLink customHidden ";
+          }
+          return " heapLink";
+        })
+        .attr("d", function (d) {
+          var o = { x: source.x0, y: source.y0 };
+          return diagonal(o, o);
+        });
+
+      // Update
+      var linkUpdate = linkEnter.merge(link);
+
+      // Transition back to the parent element position
+      linkUpdate
+        .transition()
+        .duration(duration)
+        .attr("d", function (d) {
+          return diagonal(d, d.parent);
+        });
+
+      // Remove any existing links
+      var linkExit = link
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr("d", function (d) {
+          var o = { x: source.x, y: source.y };
+        })
+        .remove();
+
+      // Store the old positions for transition.
+      nodes.forEach(function (d) {
+        d.x0 = d.x;
+        d.y0 = d.y;
+      });
+
+      // Create a curved (diagonal) path from parent to the child nodes
+      function diagonal(s, d) {
+        path = `M ${s.x} ${s.y}
+            C ${(s.x + d.x) / 2} ${s.y},
+              ${(s.x + d.x) / 2} ${d.y},
+              ${d.x} ${d.y}`;
+
+        return path;
+      }
+
+      // Toggle children on click
+      function click(d) {
+        if (d.children) {
+          d._children = d.children;
+          d.children = null;
+        } else {
+          d.children = d._children;
+          d._children = null;
+        }
+        update(d);
+      }
+    }
+  }
+
+  // var myheap = new MinHeap();
+  // for (let j = 4; j > 0; j--) {
+  //   myheap.add({ key: "id-" + j, value: j });
+  // }
+  // createHeapSVG(myheap.values);
+  // myheap.extractMin();
+  // myheap.extractMin();
+  // console.log(myheap.values);
+  // createHeapSVG(myheap.values);
+  // Graph -----------------------------------------------------------------------------
+
+  var width = 750,
+    height = 500,
+    charge = -500;
+
+  var color = d3version3.scale.category20();
+
+  var force = d3version3.layout
+    .force()
+    .charge(charge) // distance between nodes
+    .linkDistance(60) //edge length
+    .size([width, height]);
+
+  var svg = d3version3
+    .select("#graph-div")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  var dijkstra;
+  var circleSize = 20; // circle size
+  var nodes = [],
+    nodesByName = {},
+    links = [];
+
+  function addNodeByName(fullname) {
+    var name = fullname;
+    if (!nodesByName[name]) {
+      var node = { name: name, links: [] };
+      nodesByName[name] = node;
+      nodes.push(node);
+      return node;
+    } else return nodesByName[name];
+  }
+
+  function isNumeric(obj) {
+    let realStringObj = obj && obj.toString();
+    return (
+      !jQuery.isArray(obj) && realStringObj - parseFloat(realStringObj) + 1 >= 0
+    );
+  }
+
+  function refreshGraph(runDijkstra = false) {
+    d3version3.select("#graph-div").select("svg").remove();
+    d3version3.select("#heap-div").select("svg").remove();
+    minHeap.values = [];
+    svg = d3version3
+      .select("#graph-div")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    force = d3version3.layout
+      .force()
+      .charge(charge)
+      .linkDistance(100)
+      .size([width, height]);
+
+    force.nodes(nodes).links(links).start();
+
+    var glink = svg.append("g").selectAll(".link").data(links).enter();
+
+    var link = glink
+      .append("line")
+      .attr("class", function (d) {
+        return "link " + d.id;
+      })
+      .style("stroke-width", 2);
+
+    var linktext = glink
+      .append("text")
+      .attr("class", function (d) {
+        return "linktext " + d.id;
+      })
+      .attr("text-anchor", "middle")
+      .style("opacity", 1)
+      .text(function (d) {
+        return d.value;
+      });
+
+    var gnode = svg.append("g").selectAll(".node").data(nodes).enter();
+
+    var node = gnode
+      .append("circle")
+      .attr("class", function (d) {
+        return "node " + d.name;
+      })
+      .attr("r", circleSize)
+      .call(force.drag);
+
+    var nodetext = gnode
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("dy", "0.35em")
+      .attr("class", function (d) {
+        return "nodetext " + d.name;
+      })
+      .text(function (d) {
+        return d.name;
+      });
+
+    link.each(function (d) {
+      d.source.links.push(d);
+      d.selection = d3version3.select(this);
+    });
+
+    node.each(function (d) {
+      d.selection = d3version3.select(this);
+    });
+
+    force.on("tick", function () {
+      link
+        .attr("x1", function (d) {
+          return d.source.x;
+        })
+        .attr("y1", function (d) {
+          return d.source.y;
+        })
+        .attr("x2", function (d) {
+          return d.target.x;
+        })
+        .attr("y2", function (d) {
+          return d.target.y;
+        });
+
+      linktext
+        .attr("x", function (d) {
+          return (d.source.x + d.target.x) / 2;
+        })
+        .attr("y", function (d) {
+          return (d.source.y + d.target.y) / 2;
+        });
+
+      nodetext
+        .attr("x", function (d) {
+          return d.x;
+        })
+        .attr("y", function (d) {
+          return d.y;
+        });
+
+      node
+        .attr("cx", function (d) {
+          return d.x;
+        })
+        .attr("cy", function (d) {
+          return d.y;
+        });
+    });
+
+    node.on("mouseover", function (d) {
+      d3version3.select(this).attr("r", circleSize + 0.5);
+    });
+
+    node.on("mouseout", function (d) {
+      d3version3.select(this).attr("r", circleSize);
+    });
+
+    dijkstra = d3version3.dijkstra().nodes(nodes).edges(links);
+    node.on("click", dijkstra.start);
+  }
+
+  function validateEdgeWeight(weight) {
+    let msg = "";
+    if (isNumeric(weight)) {
+      if (weight * 1 >= 0) return true;
+      msg = "Negative edge weights not allowed";
+    } else {
+      msg = "Invalid weight";
+    }
+    $("#validity").text(msg);
+    return false;
+  }
+
+  function validateText(txt) {
+    if (txt.trim() == "") return false;
+    return true;
+  }
+
+  $("#insertNodeBtn").on("click", function () {
+    $(".btn").attr("disabled", "disabled");
+    $("#validity").text("");
+    let nodeName = $("#nodeInput").val();
+    addNodeByName(nodeName);
+
+    refreshGraph();
+    $(".btn").removeAttr("disabled");
+  });
+
+  $("#insertEdgeBtn").on("click", function () {
+    $(".btn").attr("disabled", "disabled");
+    $("#validity").text("");
+    let weight = $("#edgeWeight").val();
+    let edgeSource = $("#edgeSource").val();
+    let edgeTarget = $("#edgeTarget").val();
+    let newEdgeID = edgeSource + edgeTarget;
+    let newEdgeIDrev = edgeTarget + edgeSource;
+    if (validateText(edgeTarget) && validateText(edgeSource)) {
+      if (edgeSource == edgeTarget) {
+        $("#validity").text("Self Loops not allowed");
+      } else {
+        if (validateEdgeWeight(weight)) {
+          let skip = 0;
+          links.forEach(function (d) {
+            if (d.id == newEdgeID || d.id == newEdgeIDrev) {
+              d.value = weight;
+              skip = 1;
+            }
+          });
+          if (!skip) {
+            links.push({
+              source: addNodeByName(edgeSource),
+              target: addNodeByName(edgeTarget),
+              value: weight * 1,
+              id: newEdgeID,
+            });
+            links.push({
+              source: addNodeByName(edgeTarget),
+              target: addNodeByName(edgeSource),
+              value: weight * 1,
+              id: newEdgeIDrev,
+            });
+          }
+
+          refreshGraph();
+        }
+      }
+    } else {
+      $("#validity").text("Invalid Source or Target Node");
+    }
+    $(".btn").removeAttr("disabled");
+  });
+</script>
+
+<script>
+  d3version3.dijkstra = function () {
+    function highlightCodeLine(lineNo) {
+      $(".code").removeClass("code-highlight");
+      if (Array.isArray(lineNo)) {
+        lineNo.forEach((d) => {
+          $("#code-line-" + d).addClass("code-highlight");
+        });
+      } else {
+        $("#code-line-" + lineNo).addClass("code-highlight");
+      }
+    }
+
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    let animationSpeed = 1000;
+
+    var dijkstra = {},
+      nodes,
+      edges,
+      source,
+      go,
+      dispatch = d3version3.dispatch("start", "tick", "step", "end");
+
+    var color = d3version3.scale
+      .linear()
+      .domain([0, 3, 10])
+      .range(["green", "yellow", "red"]);
+    var translate_speed = 3000;
+
+    dijkstra.run = function (src) {
+      // clear previous run
+      clearInterval(go);
+      source = src;
+      var unvisited = [];
+      var current = src;
+      let nodeSize = 20;
+
+      let p = Promise.resolve();
+      p = p
+        .then(() => highlightCodeLine(1))
+        .then(() => delay(animationSpeed))
+        .then(() => highlightCodeLine(2))
+        .then(() => delay(animationSpeed))
+        .then(() => {
+          // reset styles
+          d3version3
+            .selectAll(".node")
+            .style("fill", "#fff")
+            .attr("r", 15)
+            .style("stroke-width", "1.5");
+          d3version3
+            .select("." + src.name)
+            .style("fill", "#fdb03f")
+            .style("stroke-width", "0");
+          d3version3.selectAll(".nodetext").text(function (d) {
+            return d.name;
+          });
+          d3version3.selectAll(".linktext").style("opacity", "0");
+        })
+        .then(() => delay(animationSpeed))
+        .then(() => highlightCodeLine(3))
+        .then(() => delay(animationSpeed))
+        .then(() => highlightCodeLine([4, 5, 6]))
+        .then(() => delay(animationSpeed))
+        .then(() => {
+          // Initialization
+          // All Node distances set to Infinity, setting all nodes as unvisited
+          nodes.forEach(function (d) {
+            if (d != src) {
+              d.distance = Infinity;
+              unvisited.push(d);
+              d.visited = false;
+            }
+            minHeap.add({ key: d.name, value: Infinity });
+          });
+          createHeapSVG(minHeap.values);
+        })
+        .then(() => delay(animationSpeed))
+        .then(() => highlightCodeLine(7))
+        .then(() => delay(animationSpeed))
+        .then(() => {
+          // Setting Source distance as zero
+          // var current = src;
+
+          current.distance = 0;
+          minHeap.changeValue(current.name, current.distance);
+          createHeapSVG(minHeap.values);
+        })
+        .then(() => delay(animationSpeed))
+        .then(() => highlightCodeLine(8))
+        .then(() => delay(animationSpeed))
+        .then(() => highlightCodeLine([9, 10]))
+        .then(() => delay(animationSpeed))
+        .then(() => {
+          minHeap.extractMin();
+          createHeapSVG(minHeap.values);
+        })
+        .then(() => {
+          function tick() {
+            current.visited = true;
+            p = p
+              .then(() => delay(animationSpeed))
+              .then(() => highlightCodeLine([12, 13, 14, 15]));
+            current.links.forEach(function (link) {
+              if (!link.target.visited) {
+                var dist = current.distance + link.value;
+                link.target.distance = Math.min(dist, link.target.distance);
+
+                minHeap.changeValue(link.target.name, link.target.distance);
+                createHeapSVG(minHeap.values);
+
+                d3version3
+                  .select("." + link.target.name)
+                  .transition()
+                  .delay(translate_speed / 8)
+                  .duration(500)
+                  .attr("r", nodeSize + 3)
+                  .style("fill", "#ecf0f1");
+                d3version3
+                  .select(".nodetext." + link.target.name)
+                  .transition()
+                  .delay(translate_speed / 8)
+                  .duration(500)
+                  .text(link.target.distance);
+                d3version3
+                  .select(".linktext." + link.id)
+                  .style("opacity", 1)
+                  .transition()
+                  .duration(translate_speed)
+                  .text(+link.value);
+              }
+            });
+            //   When all nodes visited or node has infinite distance -> stop
+            if (unvisited.length == 0 || current.distance == Infinity) {
+              clearInterval(go);
+              createHeapSVG(minHeap.values);
+              return true;
+            }
+
+            //   find minimum amongst the adjacent nodes
+            unvisited.sort(function (a, b) {
+              return b.distance - a.distance;
+            });
+
+            //   select minimum to visit next
+            current = unvisited.pop();
+
+            //   applying appropriate css
+            d3version3
+              .select("." + current.name)
+              .transition()
+              .delay((translate_speed * 2) / 5)
+              .duration(translate_speed / 5)
+              .attr("r", 10)
+              .transition()
+              .duration(translate_speed / 5)
+              .attr("r", 15)
+              .style("fill", "#D0E1C3")
+              .style("stroke-width", "0");
+
+            d3version3
+              .select(".nodetext." + current.name)
+              .transition()
+              .delay((translate_speed * 4) / 5)
+              .text(function (d) {
+                return d.distance;
+              });
+          }
+          tick();
+          go = setInterval(tick, translate_speed);
+        });
+
+      // recursively relax adjacent nodes starting from source
+      // function tick() {
+      //   current.visited = true;
+      //   current.links.forEach(function (link) {
+      //     if (!link.target.visited) {
+      //       var dist = current.distance + link.value;
+      //       link.target.distance = Math.min(dist, link.target.distance);
+      //       d3version3.select("." + link.target.name)
+      //         .transition()
+      //         .delay(translate_speed / 8)
+      //         .duration(500)
+      //         .attr("r", nodeSize + 3)
+      //         .style("fill", "#ecf0f1");
+      //       d3version3.select(".nodetext." + link.target.name)
+      //         .transition()
+      //         .delay(translate_speed / 8)
+      //         .duration(500)
+      //         .text(link.target.distance);
+      //       d3version3.select(".linktext." + link.id)
+      //         .style("opacity", 1)
+      //         .transition()
+      //         .duration(translate_speed)
+      //         .text(+link.value);
+      //     }
+      //   });
+      //   //   When all nodes visited or node has infinite distance -> stop
+      //   if (unvisited.length == 0 || current.distance == Infinity) {
+      //     clearInterval(go);
+      //     return true;
+      //   }
+
+      //   //   find minimum amongst the adjacent nodes
+      //   unvisited.sort(function (a, b) {
+      //     return b.distance - a.distance;
+      //   });
+
+      //   //   select minimum to visit next
+      //   current = unvisited.pop();
+
+      //   //   applying appropriate css
+      //   d3version3.select("." + current.name)
+      //     .transition()
+      //     .delay((translate_speed * 2) / 5)
+      //     .duration(translate_speed / 5)
+      //     .attr("r", 10)
+      //     .transition()
+      //     .duration(translate_speed / 5)
+      //     .attr("r", 15)
+      //     .style("fill", "#D0E1C3")
+      //     .style("stroke-width", "0");
+
+      //   d3version3.select(".nodetext." + current.name)
+      //     .transition()
+      //     .delay((translate_speed * 4) / 5)
+      //     .text(function (d) {
+      //       return d.distance;
+      //     });
+      // }
+
+      // tick();
+      // go = setInterval(tick, translate_speed);
+    };
+
+    dijkstra.nodes = function (_) {
+      if (!arguments.length) return nodes;
+      else {
+        nodes = _;
+        return dijkstra;
+      }
+    };
+
+    dijkstra.edges = function (_) {
+      if (!arguments.length) return edges;
+      else {
+        edges = _;
+        return dijkstra;
+      }
+    };
+
+    dijkstra.source = function (_) {
+      if (!arguments.length) return source;
+      else {
+        source = _;
+        return dijkstra;
+      }
+    };
+
+    dispatch.on("start.code", dijkstra.run);
+
+    return d3version3.rebind(dijkstra, dispatch, "on", "end", "start", "tick");
+  };
+</script>

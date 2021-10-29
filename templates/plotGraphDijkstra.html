@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='styles/dragndrop.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='styles/codeHighlight.css') }}"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static',filename='js/dijkstra.js') }}"></script>
+
+    <script>
+      $(function () {
+        $("#header").load("/header");
+      });
+    </script>
+    <style>
+      body {
+        /* width: 1024px; */
+        margin: 0;
+        /* margin: auto; */
+        font-family: "Lato", "PT Serif", serif;
+        color: #222222;
+        padding: 0;
+        font-weight: 300;
+        line-height: 20px;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: row;
+        margin: 5% 0% 0% 0%;
+      }
+      .graph-container {
+        width: 50%;
+        display: flex;
+
+        flex-direction: column;
+      }
+      /* .heap-container {
+        width: 40%;
+      } */
+      .code-container {
+        /* width: 20%; */
+        font-size: 15px;
+        padding: 5px;
+        margin-left: 10px;
+      }
+
+      .node {
+        stroke: #b8b3eb;
+        stroke-width: 1.5px;
+        fill: #bdc3c7;
+        stroke-dasharray: 2px, 2px;
+      }
+
+      .link {
+        stroke: #778183;
+        stroke-opacity: 0.6;
+      }
+
+      .linktext {
+        fill: #465153;
+        background-color: #ffffff;
+      }
+
+      text {
+        pointer-events: none;
+      }
+
+      #graph-div {
+        border: 2px solid #8fe1e7;
+        border-radius: 5px;
+        margin-top: 1rem;
+      }
+
+      .range-input {
+        position: absolute;
+        top: 80%;
+        left: 10%;
+        transform: translate(-50%, -50%);
+        background: #eee;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+      }
+      .range-input input {
+        -webkit-appearance: none;
+        width: 200px;
+        height: 2px;
+        background: #4471ef;
+        border: none;
+        outline: none;
+      }
+      .range-input input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #eee;
+        border: 2px solid #4471ef;
+        border-radius: 50%;
+      }
+      .range-input input::-webkit-slider-thumb:hover {
+        background: #4471ef;
+      }
+      .range-input .value {
+        color: #4471ef;
+        text-align: center;
+        font-weight: 600;
+        line-height: 40px;
+        height: 40px;
+        overflow: hidden;
+        margin-left: 10px;
+      }
+      .range-input .value div {
+        transition: all 300ms ease-in-out;
+      }
+      #codeBox {
+        margin: 2rem 0 0 0rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <div class="container">
+      <div class="graph-container">
+        <div id="graph-div"></div>
+        <!-- Speed Slider -->
+        <div class="range-input">
+          <input type="range" min="0" max="100" value="0" step="10" />
+          <div class="value">
+            <div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="heap-container"></div>
+
+      <div id="codeBox" class="code-container">
+        <div id="code-line-1" class="code">
+          function Dijkstra(Graph, source):
+        </div>
+        <div id="code-line-2" class="code code-indent">create vertex set Q</div>
+
+        <div id="code-line-3" class="code code-indent">
+          for each vertex v in Graph:
+        </div>
+        <div id="code-line-4" class="code code-double-indent">
+          dist[v] ← INFINITY
+        </div>
+        <div id="code-line-5" class="code code-double-indent">
+          prev[v] ← UNDEFINED
+        </div>
+        <div id="code-line-6" class="code code-double-indent">add v to Q</div>
+        <div id="code-line-7" class="code code-indent">dist[source] ← 0</div>
+
+        <div id="code-line-8" class="code code-indent">
+          while Q is not empty:
+        </div>
+        <div id="code-line-9" class="code code-double-indent">
+          u ← vertex in Q with min dist[u]
+        </div>
+
+        <div id="code-line-10" class="code code-double-indent">
+          remove u from Q
+        </div>
+
+        <div id="code-line-11" class="code code-double-indent">
+          for each neighbor v of u still in Q:
+        </div>
+        <div id="code-line-12" class="code code-triple-indent">
+          alt ← dist[u] + length(u, v)
+        </div>
+        <div id="code-line-13" class="code code-triple-indent">
+          if alt &lt; dist[v]:
+        </div>
+        <div id="code-line-14" class="code code-four-indent">dist[v] ← alt</div>
+        <div id="code-line-15" class="code code-four-indent">prev[v] ← u</div>
+        <div id="code-line-16" class="code code-indent">
+          return dist[], prev[]
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var width = 700,
+        height = 500;
+
+      var color = d3.scale.category20();
+
+      // Node interation parameters
+      var force = d3.layout
+        .force()
+        .charge(-5000)
+        .linkDistance(60)
+        .size([width, height]);
+
+      var svg = d3
+        .select("#graph-div")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+      // .attr("display", "block")
+      // .attr("style", "margin:auto");
+      var csvFile = "static/data/" + "{{filename}}";
+
+      // Read CSV and create graph accordingly
+      d3.csv(csvFile, function (error, data) {
+        var nodes = [],
+          nodesByName = {},
+          links = [];
+        function addNodeByName(fullname) {
+          var name = fullname.split(",")[0];
+          if (!nodesByName[name]) {
+            var node = { name: name, links: [] };
+            nodesByName[name] = node;
+            nodes.push(node);
+            return node;
+          } else return nodesByName[name];
+        }
+
+        data.forEach(function (d) {
+          for (k in d) {
+            if (d.hasOwnProperty(k) && k != "nodes" && d[k] < 750) {
+              var edge_weight = parseFloat(d[k]).toFixed(2);
+              if (typeof parseFloat(edge_weight) == "number") {
+                links.push({
+                  source: addNodeByName(d["nodes"]),
+                  target: addNodeByName(k),
+                  value: parseFloat(edge_weight),
+                  id: addNodeByName(d["nodes"]).name + addNodeByName(k).name,
+                });
+              } else {
+                alert("Invalid File");
+              }
+            }
+          }
+        });
+
+        force.nodes(nodes).links(links).start();
+
+        var glink = svg.append("g").selectAll(".link").data(links).enter();
+
+        var link = glink
+          .append("line")
+          .attr("class", function (d) {
+            return "link " + d.id;
+          })
+          .style("stroke-width", 2);
+
+        var linktext = glink
+          .append("text")
+          .attr("class", function (d) {
+            return "linktext " + d.id;
+          })
+          .attr("text-anchor", "middle")
+          .style("opacity", 0)
+          .text(function (d) {
+            return d.value;
+          });
+
+        var gnode = svg.append("g").selectAll(".node").data(nodes).enter();
+
+        var node = gnode
+          .append("circle")
+          .attr("class", function (d) {
+            return "node " + d.name;
+          })
+          .attr("r", 15)
+          .call(force.drag);
+
+        var nodetext = gnode
+          .append("text")
+          .attr("text-anchor", "middle")
+          .attr("dy", "0.35em")
+          .attr("class", function (d) {
+            return "nodetext " + d.name;
+          })
+          .text(function (d) {
+            return d.name;
+          });
+
+        link.each(function (d) {
+          d.source.links.push(d);
+          d.selection = d3.select(this);
+        });
+
+        node.each(function (d) {
+          d.selection = d3.select(this);
+        });
+
+        force.on("tick", function () {
+          link
+            .attr("x1", function (d) {
+              return d.source.x;
+            })
+            .attr("y1", function (d) {
+              return d.source.y;
+            })
+            .attr("x2", function (d) {
+              return d.target.x;
+            })
+            .attr("y2", function (d) {
+              return d.target.y;
+            });
+
+          linktext
+            .attr("x", function (d) {
+              return (d.source.x + d.target.x) / 2;
+            })
+            .attr("y", function (d) {
+              return (d.source.y + d.target.y) / 2;
+            });
+
+          nodetext
+            .attr("x", function (d) {
+              return d.x;
+            })
+            .attr("y", function (d) {
+              return d.y;
+            });
+
+          node
+            .attr("cx", function (d) {
+              return d.x;
+            })
+            .attr("cy", function (d) {
+              return d.y;
+            });
+        });
+
+        node.on("mouseover", function (d) {
+          d3.select(this).attr("r", 16.5);
+        });
+
+        node.on("mouseout", function (d) {
+          d3.select(this).attr("r", 15);
+        });
+
+        var dijkstra = d3.dijkstra().nodes(nodes).edges(links);
+
+        node.on("click", dijkstra.start);
+      });
+    </script>
+  </body>
+</html>

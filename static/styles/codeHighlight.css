@@ -1,0 +1,27 @@
+.code-container {
+  overflow: hidden;
+  margin-left: 10px;
+  font-family: Courier New, monospace;
+  font-size: 11px;
+  font-weight: bold;
+}
+.code {
+  border-radius: 5px;
+  padding: 3px;
+}
+.code-indent {
+  margin-left: 30px;
+}
+.code-double-indent {
+  margin-left: 60px;
+}
+.code-triple-indent {
+  margin-left: 90px;
+}
+.code-four-indent {
+  margin-left: 120px;
+}
+.code-highlight {
+  background-color: rgb(160, 103, 19);
+  transition-duration: 1s;
+}
