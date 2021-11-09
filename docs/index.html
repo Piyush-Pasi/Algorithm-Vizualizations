@@ -1,0 +1,1602 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'>
+  <title>  | Documentation</title>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' rel='stylesheet'>
+  <link href='assets/style.css' rel='stylesheet'>
+  <link href='assets/github.css' rel='stylesheet'>
+  <link href='assets/split.css' rel='stylesheet'>
+</head>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'></h3>
+          <div class='mb1'><code></code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            spellcheck='false'
+            autocapitalize='off'
+            autocorrect='off'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#highlightcodeline'
+                  class="">
+                  highlightCodeLine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#highlightcodeline'
+                  class="">
+                  highlightCodeLine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#makedjgraph'
+                  class="">
+                  makeDJGraph
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#addnodebyname'
+                  class="">
+                  addNodeByName
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#isvalidfiletype'
+                  class="">
+                  isValidFileType
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#changetext'
+                  class="">
+                  changeText
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#validateandsubmit'
+                  class="">
+                  validateAndSubmit
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createnodedata'
+                  class="">
+                  createNodeData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#createedgedata'
+                  class="">
+                  createEdgeData
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#drawgraph'
+                  class="">
+                  drawGraph
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#highlightnode'
+                  class="">
+                  highlightNode
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#dehighlightnode'
+                  class="">
+                  deHighlightNode
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setnextpointertocurrentnext'
+                  class="">
+                  setNextPointerToCurrentNext
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setcurrentnexttoprevpointer'
+                  class="">
+                  setCurrentNextToPrevPointer
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setprevtocurrent'
+                  class="">
+                  SetPrevToCurrent
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setcurrenttonext'
+                  class="">
+                  SetCurrentToNext
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#setheadtoprev'
+                  class="">
+                  setHeadToPrev
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#reversal'
+                  class="">
+                  reversal
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#isnumeric'
+                  class="">
+                  isNumeric
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#startpage'
+                  class="">
+                  startPage
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='highlightcodeline'>
+      highlightCodeLine
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to highlight the appropriate code line of Dijkstra's code by selecting the line
+and applying code-highlight style to it.</p>
+
+    <div class='pre p1 fill-light mt0'>highlightCodeLine(lineNo: int)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>lineNo</span> <code class='quiet'>(int)</code>
+	    line number to highlight
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='highlightcodeline'>
+      highlightCodeLine
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to highlight the relevent lines of code</p>
+
+    <div class='pre p1 fill-light mt0'>highlightCodeLine(lineNo: int)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>lineNo</span> <code class='quiet'>(int)</code>
+	    Line number in code
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='makedjgraph'>
+      makeDJGraph
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to take input file from user which specifies the graph nodes and edges.
+It also creates the graph inserted by user.</p>
+
+    <div class='pre p1 fill-light mt0'>makeDJGraph(data_file: file)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data_file</span> <code class='quiet'>(file)</code>
+	    graph layout file
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='addnodebyname'>
+      addNodeByName
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to add nodes to graph with name specified.</p>
+
+    <div class='pre p1 fill-light mt0'>addNodeByName(fullname: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fullname</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    name of the node
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a></code>:
+        Node with name
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='isvalidfiletype'>
+      isValidFileType
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to validate all file types</p>
+
+    <div class='pre p1 fill-light mt0'>isValidFileType(fName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, fType: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    File name
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fType</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    File type
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='changetext'>
+      changeText
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to check if multiple files have been submitted</p>
+
+    <div class='pre p1 fill-light mt0'>changeText(obj: any, null: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>obj</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>null</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    } obj - file object
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='validateandsubmit'>
+      validateAndSubmit
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to check if file type is valid or not</p>
+
+    <div class='pre p1 fill-light mt0'>validateAndSubmit(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createnodedata'>
+      createNodeData
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to create node with properties of node, ID, position and weight</p>
+
+    <div class='pre p1 fill-light mt0'>createNodeData(id: int, xpos: int, ypos: int, weight: int): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(int)</code>
+	    Node id
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>xpos</span> <code class='quiet'>(int)</code>
+	    x axis coordinate
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ypos</span> <code class='quiet'>(int)</code>
+	    y axis coordinate
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>weight</span> <code class='quiet'>(int
+            = <code>0</code>)</code>
+	    node weight
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        Node
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='createedgedata'>
+      createEdgeData
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to create edge with properties, ID, start and end</p>
+
+    <div class='pre p1 fill-light mt0'>createEdgeData(id: int, source: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>, target: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>id</span> <code class='quiet'>(int)</code>
+	    Edge id
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>source</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</code>
+	    Edge start
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</code>
+	    Edge end
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        edge
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='drawgraph'>
+      drawGraph
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Funciton to create linked list</p>
+
+    <div class='pre p1 fill-light mt0'>drawGraph(nodes: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nodes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>)</code>
+	    array of linked list nodes
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='highlightnode'>
+      highlightNode
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to highlight current node</p>
+
+    <div class='pre p1 fill-light mt0'>highlightNode(nodeId: int, nodeType: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nodeId</span> <code class='quiet'>(int)</code>
+	    ID of node
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nodeType</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+            = <code>&quot;source&quot;</code>)</code>
+	    Source/Target node
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='dehighlightnode'>
+      deHighlightNode
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Funciotn to turn highlighted node back to normal</p>
+
+    <div class='pre p1 fill-light mt0'>deHighlightNode(nodeId: int)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nodeId</span> <code class='quiet'>(int)</code>
+	    ID of node
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setnextpointertocurrentnext'>
+      setNextPointerToCurrentNext
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to set next pointer to current's next node</p>
+
+    <div class='pre p1 fill-light mt0'>setNextPointerToCurrentNext(currNode: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>currNode</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</code>
+	    Current node
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setcurrentnexttoprevpointer'>
+      setCurrentNextToPrevPointer
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to set current node's next node to previous</p>
+
+    <div class='pre p1 fill-light mt0'>setCurrentNextToPrevPointer(currNode: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>currNode</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</code>
+	    Current node
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setprevtocurrent'>
+      SetPrevToCurrent
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to set Previous node to current</p>
+
+    <div class='pre p1 fill-light mt0'>new SetPrevToCurrent(currNode: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>currNode</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setcurrenttonext'>
+      SetCurrentToNext
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to set current node to next</p>
+
+    <div class='pre p1 fill-light mt0'>new SetCurrentToNext(currNode: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>currNode</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">node</a>)</code>
+	    Current node
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='setheadtoprev'>
+      setHeadToPrev
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to set head pointer to previous</p>
+
+    <div class='pre p1 fill-light mt0'>setHeadToPrev()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='reversal'>
+      reversal
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to animate the lined list reversal with code line highlighting
+Syncing line highlight with visualisation</p>
+
+    <div class='pre p1 fill-light mt0'>reversal()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='isnumeric'>
+      isNumeric
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to check if object is numeric or not</p>
+
+    <div class='pre p1 fill-light mt0'>isNumeric(obj: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>obj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='startpage'>
+      startPage
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Function to show the linked list with specified node weights</p>
+
+    <div class='pre p1 fill-light mt0'>startPage(customNodes: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>customNodes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>
+            = <code>[10,20,30]</code>)</code>
+	    array of node weights
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+      </div>
+    </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>
