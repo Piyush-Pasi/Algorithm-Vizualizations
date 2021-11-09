@@ -10,9 +10,7 @@ All this motivated us to implement this project of algorithm visualizations.
 
 ## Project by
 
-**Piyush Singh Pasi 213050069** Dijkstra's Algorithm and Binary search tree\
-Kushagra Shandilya 21Q050010 Linked list reversal and Dijkstra's Algorithm\
-Vedant Singh 213050038 Homepage and Dijkstra's Algorithm
+**Piyush Singh Pasi**, Kushagra Shandilya, Vedant Singh
 
 ## Features
 
