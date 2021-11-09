@@ -1,4 +1,4 @@
-# Algorithm Visualizations
+# Optic Algo
 
 **Make your algorithm learning journey easier with Algorithm Visualizations**
 
@@ -11,8 +11,8 @@ All this motivated us to implement this project of algorithm visualizations.
 ## Project by
 
 **Piyush Singh Pasi 213050069** Dijkstra's Algorithm and Binary search tree\
-**Kushagra Shandilya 21Q050010** Linked list reversal and Dijkstra's Algorithm\
-**Vedant Singh 213050038** Homepage and Dijkstra's Algorithm
+Kushagra Shandilya 21Q050010 Linked list reversal and Dijkstra's Algorithm\
+Vedant Singh 213050038 Homepage and Dijkstra's Algorithm
 
 ## Features
 
