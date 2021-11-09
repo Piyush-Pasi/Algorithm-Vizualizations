@@ -85,7 +85,7 @@ $ flask run
 Open http://127.0.0.1:5000/ on browser
 
 ### Or
-GO to https://optic-algo.herokuapp.com/ on browser
+Go to https://optic-algo.herokuapp.com/ on browser
 
 ## Stakeholders of the product/service
 
