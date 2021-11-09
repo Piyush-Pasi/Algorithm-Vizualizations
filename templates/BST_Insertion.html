@@ -70,18 +70,25 @@
         margin: 2rem 0 0 0rem;
       }
     </style>
+    <style>
+      body {
+        font-size: 150%;
+      }
+    </style>
   </head>
 
-  <!--References: http://alexkatz.me/posts/binary-search-tree/-->
-
   <body>
+    <!-- header -->
     <div id="header"></div>
 
     <div class="wrapper">
+      <!-- To Draw Graph -->
       <div class="container treeBox" style="width: 90%">
         <div class="row">
+          <!-- Div for Previous Tree -->
           <div id="BSTree_prev" class="col-xs-6 col-sm-6 col-md-6"></div>
           <div id="arrow"></div>
+          <!-- Div for Tree After Insertion-->
           <div
             id="BSTree_next"
             class="col-xs-6 col-sm-6 col-md-6 invisibleDiv"
@@ -91,6 +98,7 @@
           <div id="BSTree_prev" class="text-center col-xs-6 col-sm-6 col-md-6">
             Current Tree
           </div>
+
           <div id="BSTree_next" class="text-center col-xs-6 col-sm-6 col-md-6">
             Tree After Insertion
           </div>
@@ -111,6 +119,8 @@
           <button id="nextBtn" class="btn btn-primary">Next</button>
         </div>
       </div>
+
+      <!-- Code Highlighting -->
       <div id="codeBox" class="code-container">
         <div id="code-line-1" class="code">insert(node, root)</div>
         <div id="code-line-2" class="code code-indent">if (root == null)</div>
@@ -153,6 +163,7 @@
         <div id="code-line-16" class="code code-indent">return root</div>
       </div>
     </div>
+    <!-- Input nodes and edges -->
     <div class="container" id="addNewNode">
       <div class="form-inline">
         <input
@@ -163,6 +174,7 @@
         <button id="insertBtn" class="btn btn-primary">Insert</button>
         <button id="finishBtn" class="btn btn-primary">Finish</button>
       </div>
+      <!-- Validation on inputs -->
       <span
         class="validity"
         style="color: rgb(243, 91, 91); font-size: medium"
@@ -174,10 +186,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.2/d3.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+  /* Refer: https://www.digitalocean.com/community/tutorials/js-binary-heaps
+    http://alexkatz.me/posts/binary-search-tree/
+    http://bl.ocks.org/sdjacobs/3900867adc06c7680d48
+    https://bl.ocks.org/mpmckenna8
+    http://bl.ocks.org/mayblue9/e5b256b077ab6fa226f045b8c187ac1d
+  */
+
+  // For highlighting current line of code: Input line No.
   function highlightCodeLine(lineNo) {
     $(".code").removeClass("code-highlight");
     $("#code-line-" + lineNo).addClass("code-highlight");
   }
+
+  // Making a Node data structure
   class Node {
     constructor(value) {
       this.value = value;
@@ -187,6 +209,7 @@
     }
   }
 
+  // Making Binary tree data structure
   class BinarySearchTree {
     constructor(node) {
       this.root = node;
@@ -216,7 +239,8 @@
         }
       }
     }
-    
+
+    // search in tree checking for node already present or not
     search(key, root, pathTraversed) {
       if (root == null) {
         return pathTraversed;
@@ -234,7 +258,9 @@
     }
   }
 
-  function myXOR(a, b) {
+  // add nodes with null value for symmtry
+  // returns boolean -> true if a single node present else false
+  function addNullNodes(a, b) {
     return (a || b) && !(a && b);
   }
 
@@ -245,7 +271,7 @@
     width = 400,
     height = 400 - margin.top - margin.bottom;
 
-  // append the svg object to the body of the page
+  // append the svg object to the BSTree_next division of the page
   // appends a 'group' element to 'svg'
   // moves the 'group' element to the top left margin
 
@@ -256,9 +282,12 @@
     .attr("viewBox", "0 0 400 400")
     .append("g")
     .attr("transform", "translate(0," + margin.top + ")");
+
   // Declares a tree layout and assigns the size
   var treemap = d3.tree().size([width, height]);
-  // Main Program
+
+  // makes tree for each number insertion in either empty or existing tree
+  // begin parameter below -> begin:True -> empty tree, begin:False -> tree exists
   function makeTree(number, begin = false) {
     let parent;
     if (begin) {
@@ -271,22 +300,23 @@
       duration = 1000,
       root;
 
-    // Assigns parent, children, height, depth, and coordinates
     var myroot = tree.root;
     if (parent != null) {
       myroot = parent;
     }
+
+    // make tree object structure from above mentioned class after insertion
     root = d3.hierarchy(tree.root, function (d) {
       d.children = [];
       if (d.left) {
         d.children.push(d.left);
-        if (myXOR(d.left, d.right)) {
+        if (addNullNodes(d.left, d.right)) {
           d.children.push(new Node("null"));
           nullCounter += 1;
         }
       }
       if (d.right) {
-        if (myXOR(d.left, d.right)) {
+        if (addNullNodes(d.left, d.right)) {
           d.children.push(new Node("null"));
           nullCounter += 1;
         }
@@ -298,6 +328,7 @@
     root.x0 = width / 2;
     root.y0 = 0;
 
+    // make nodes symmetric
     update(root);
 
     // Collapse the node and all it's children
@@ -309,28 +340,25 @@
       }
     }
 
-    // Update
+    // align all nodes and paths to be symmetric
     function update(source) {
-      // Assigns the x and y position for the nodes
       var treeData = treemap(root);
 
-      // Compute the new tree layout.
+      // Tree layout
       var nodes = treeData.descendants(),
         links = treeData.descendants().slice(1);
 
-      // Normalize for fixed-depth
+      // setting depth of nodes
       nodes.forEach(function (d) {
         d.y = d.depth * 100;
       });
 
-      // **************** Nodes Section ****************
-
-      // Update the nodes...
+      // setting nodes data and ids
       var node = svg.selectAll("g.node").data(nodes, function (d) {
         return d.id || (d.id = d.value);
       });
 
-      // Enter any new nodes at the parent's previous position.
+      // add nodes w.r.t parent's position
       var nodeEnter = node
         .enter()
         .append("g")
@@ -339,7 +367,7 @@
           return "translate(" + source.x0 + "," + source.y0 + ")";
         });
 
-      // Add Circle for the nodes
+      // add css and data attributes to nodes
       nodeEnter
         .append("circle")
         .attr("class", function (d) {
@@ -365,6 +393,7 @@
           return d.data.value;
         });
 
+      // Add label space Navigation while searching the tree ('Go left' or 'Go right')
       nodeEnter
         .append("text")
         .attr("dy", "-2.5em")
@@ -380,7 +409,7 @@
       // Update
       var nodeUpdate = nodeEnter.merge(node);
 
-      // Transition to the proper position for the nodes
+      // re-assigning correct positions for symmetry
       nodeUpdate
         .transition()
         .duration(500)
@@ -388,7 +417,7 @@
           return "translate(" + d.x + "," + d.y + ")";
         });
 
-      // Update the node attributes and style
+      // css of nodes updated
       nodeUpdate
         .select("circle.node")
         .attr("r", 20)
@@ -397,7 +426,7 @@
         })
         .attr("cursor", "pointer");
 
-      // Remove any exiting nodes
+      // remove nodes
       nodeExit = node
         .exit()
         .transition()
@@ -407,20 +436,18 @@
         })
         .remove();
 
-      // On exit reduce the node circles size to 0
+      // on removing make circle vanish
       nodeExit.select("circle").attr("r", 1e-6);
 
-      // On exit reduce the opacity of text lables
+      // on removing remove text
       nodeExit.select("text").style("fill-opacity", 1e-6);
-
-      // **************** Links Section ****************
 
       // Update the links
       var link = svg.selectAll("path.link").data(links, function (d) {
         return d.id;
       });
 
-      // Enter any new links at the parent's previous position
+      //  add links w.r.t parent's position
       var linkEnter = link
         .enter()
         .insert("path", "g")
@@ -438,7 +465,7 @@
       // Update
       var linkUpdate = linkEnter.merge(link);
 
-      // Transition back to the parent element position
+      // links w.r.t parent's position
       linkUpdate
         .transition()
         .duration(duration)
@@ -462,7 +489,7 @@
         d.y0 = d.y;
       });
 
-      // Create a curved (diagonal) path from parent to the child nodes
+      // links are curved and not straight links
       function diagonal(s, d) {
         path = `M ${s.x} ${s.y}
             C ${(s.x + d.x) / 2} ${s.y},
@@ -472,7 +499,7 @@
         return path;
       }
 
-      // Toggle children on click
+      // on click function for toggling
       function click(d) {
         if (d.children) {
           d._children = d.children;
@@ -486,11 +513,17 @@
     }
   }
 
+  // change color of node if given id
+  // id: id of node to be colored
+  // color: color of your choice
   function changeColor(id, color) {
     let node = "#" + id;
     $("#BSTree_prev").find(node).css({ fill: color });
   }
 
+  // color sequence of nodes in path
+  // path: list of ids to be colored
+  // color: color of your choice
   function colorSearchedNodes(path, color) {
     let n = path.length;
     console.log(path);
@@ -503,6 +536,9 @@
     }
   }
 
+  // declared stack and duration, and other variables
+  // stacks: for history
+  // duration variables: for synchronization
   var stack_prev = [];
   var stack_next = [];
   var num_i = 0;
@@ -513,16 +549,24 @@
   var initialTree = 0;
   var prevBSTree, nextBSTree;
 
+  // gets path of key in binary tree
+  // stores path in variable searchPath
   function getPath(key) {
     searchPath = tree.search(key, tree.root, []);
   }
 
+  // If no tree exists
   if (numbers.length > 0) {
     makeTree(numbers[num_i], (begin = true));
     initial = 1;
   }
 
+  // delay function to add delay
+  // ms : time in milliseconds
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  // repeated adding tree from given array using promise chaining
+
   for (let num_i = 1, p = Promise.resolve(); num_i < numbers.length; num_i++) {
     p = p
       .then(() => delay(nodeDuration))
@@ -531,7 +575,7 @@
         for (let j = 0, pj = Promise.resolve(); j < searchPath.length; j++) {
           pj = pj
             .then(() => delay(colorDuration))
-            .then(() => changeColor(searchPath[j], "red"));
+            .then(() => changeColor(searchPath[j], "red")); // change color of node
         }
       })
       .then(() => delay(nodeDuration * 2))
@@ -539,13 +583,16 @@
         for (let j = 0, pj = Promise.resolve(); j < searchPath.length; j++) {
           pj = pj
             .then(() => delay(colorDuration))
-            .then(() => changeColor(searchPath[j], "white"));
+            .then(() => changeColor(searchPath[j], "white")); // change color of node
         }
       })
       .then(() => delay(nodeDuration * 2))
       .then(() => makeTree(numbers[num_i]));
   }
 
+  // to validate if given input is number or not
+  // obj: any input
+  // returns : boolean -> true if numeric else false
   function isNumeric(obj) {
     var realStringObj = obj && obj.toString();
     return (
@@ -553,6 +600,7 @@
     );
   }
 
+  // to generate appropriate validation messages for input
   function validate(num) {
     if (isNumeric(num)) {
       getPath(num);
@@ -565,15 +613,22 @@
     }
   }
 
+  // setting variables like for keeping checks or duration
   var prevNextBtnsSet = 0;
   var finalsvg;
-  var highlightDuration = 750;
+  var highlightDuration = 1250;
+
+  // insert node on click of insert button
   $("#insertBtn").on("click", function () {
+    // disable all buttons so that no one can intervene while insertion
     $(".btn").attr("disabled", "disabled");
+
+    // if process of insertion is restarted clear everything like stacks, previous trees, etc.
     if ($("#insertBtn").text() == "Restart") {
       initialTree = 0;
       stack_prev = [];
       stack_next = [];
+      // remove previous trees and repaint new trees
       d3.select("#BSTree_next").select("svg").remove();
       d3.select("#BSTree_prev").select("svg").remove();
       $("#insertBtn").text("Insert");
@@ -586,19 +641,24 @@
         .attr("transform", "translate(0," + margin.top + ")");
     }
 
+    // input node value
     let num = $("#nodeInput").val();
+
+    // if empty tree
     if (initialTree == 0) {
+      // if valid node
       if (isNumeric(num)) {
         $(".validity").text("");
         num = num * 1;
         initialTree = 1;
         let p = Promise.resolve();
-
+        // highlight appropriate lines
         p.then(() => highlightCodeLine(2))
           .then(() => delay(highlightDuration))
           .then(() => highlightCodeLine(3))
           .then(() => delay(highlightDuration))
           .then(() => {
+            // add in tree, and set respective division for loading trees
             makeTree(num, (begin = true));
             $("#BSTree_next").addClass("invisibleDiv");
             $("#prevNextBtnDiv").addClass("invisibleDiv");
@@ -608,7 +668,6 @@
             $("#BSTree_next svg").clone().appendTo($("#BSTree_prev"));
             finalsvg = $("#BSTree_next svg").clone();
 
-            // make and arrow;
             prevBSTree = Object.assign(
               Object.create(Object.getPrototypeOf(tree)),
               tree
@@ -620,6 +679,7 @@
             $(".btn").removeAttr("disabled");
           });
       } else {
+        // display validation if invalid number
         $(".validity").text(validate(num));
         $(".btn").removeAttr("disabled");
       }
@@ -630,11 +690,10 @@
       if (msg == "ok") {
         $(".validity").text("");
 
-        // Int conversion
+        // Number conversion after validation (done previously)
         num = num * 1;
-        // search in prev svg
 
-        // push next svg to prev svg
+        // push next tree to previous tree
         stack_prev.push([
           $("#BSTree_prev svg").clone(),
           Object.assign(
@@ -649,13 +708,14 @@
           nextBSTree
         );
 
-        var left = $("#BSTree_prev").offset().left; // Get the calculated left position
+        // Adding some effects
+        // Get the calculated left position
+        var left = $("#BSTree_prev").offset().left;
 
-        $("#BSTree_prev")
-          .css({ left: left }) // Set the left to its calculated position
-          .animate({ left: "0px" }, "slow");
+        // Set the left to its calculated position
+        $("#BSTree_prev").css({ left: left }).animate({ left: "0px" }, "slow");
 
-        // wait till coloring
+        // add highlighting, coloring search path and adding node in tree
         let p = Promise.resolve();
         p.then(() => highlightCodeLine(2))
           .then(() => delay(highlightDuration))
@@ -674,14 +734,14 @@
                 .then(() => highlightCodeLine(6))
                 .then(() => delay(highlightDuration))
                 .then(() => {
-                  changeColor(searchPath[j], "red");
+                  changeColor(searchPath[j], "red"); // color visited node in path
                   if (num < searchPath[j]) {
                     let promiseCode = Promise.resolve();
                     promiseCode
                       .then(() => {
                         $("#BSTree_prev")
                           .find("#" + searchPath[j] + "_text")
-                          .text("Go Left");
+                          .text("Go Left"); // show node's direction
                       })
                       .then(() => highlightCodeLine(7))
                       .then(() => delay(highlightDuration))
@@ -699,7 +759,7 @@
                       .then(() => {
                         $("#BSTree_prev")
                           .find("#" + searchPath[j] + "_text")
-                          .text("Go Right");
+                          .text("Go Right"); // show node's direction
                       })
                       .then(() => highlightCodeLine(12))
                       .then(() => delay(highlightDuration))
@@ -719,7 +779,7 @@
             $("#BSTree_next").removeClass("invisibleDiv");
           })
           .then(() => delay(nodeDuration * 4))
-          .then(() => makeTree(num))
+          .then(() => makeTree(num)) // add node to tree
           .then(() => {
             // clear next stack after each insertion
             stack_next = [];
@@ -732,6 +792,7 @@
             $(".btn").removeAttr("disabled");
           });
       } else {
+        // display validation messages; code highlighting
         if (msg == "Invalid number") {
           $(".validity").text(msg);
           $("#insertBtn").removeAttr("disabled");
@@ -756,10 +817,11 @@
         }
       }
     }
-
+    // buttons of history to be added only when finished
     disablePrevNextBtns();
   });
 
+  // show or hide buttons related to history, enabled when finished and stacks not empty
   function disablePrevNextBtns() {
     if (stack_next.length == 0) {
       $("#nextBtn").attr("disabled", "disabled");
@@ -777,6 +839,7 @@
     disablePrevNextBtns();
   });
 
+  // displaying previous tree
   $("#prevBtn").on("click", function () {
     // push next svg onto stack
     prevNextBtnsSet = 1;
@@ -804,6 +867,7 @@
     disablePrevNextBtns();
   });
 
+  // displaying next tree
   $("#nextBtn").on("click", function () {
     // push prev svg onto stack
     prevNextBtnsSet = 1;
@@ -834,14 +898,21 @@
     disablePrevNextBtns();
   });
 
+  // enable buttons to display history via stacks
   $("#finishBtn").on("click", function () {
     $(".validity").text("");
+    // push current trees on stack
     stack_next.push([$("#BSTree_next svg").clone(), ""]);
     stack_next.push([$("#BSTree_prev svg").clone(), ""]);
+
+    // push everything on one stack
     while (stack_prev.length != 0) {
       stack_next.push(stack_prev.pop());
     }
+    // enable prev, next buttons to navigate
     disablePrevNextBtns();
+
+    // set initial view of history
     d3.select("#BSTree_prev").select("svg").remove();
     stack_next.pop()[0].appendTo($("#BSTree_prev"));
     disablePrevNextBtns();
@@ -850,6 +921,8 @@
     disablePrevNextBtns();
     $("#prevNextBtnDiv").removeClass("invisibleDiv");
     $("#finishBtn").attr("disabled", "disabled");
+
+    // set for restart
     $("#insertBtn").text("Restart");
   });
 </script>

@@ -86,7 +86,7 @@ cytoscapeStyle = [
  * Function to create node with properties of node, ID, position and weight
  * @param {int} id - Node id
  * @param {int} xpos - x axis coordinate
- * @param {int} ypos - y axis coordinate 
+ * @param {int} ypos - y axis coordinate
  * @param {int} weight - node weight
  * @returns Node
  */
@@ -101,8 +101,8 @@ let createNodeData = function (id, xpos, ypos, weight = 0) {
 /**
  * Function to create edge with properties, ID, start and end
  * @param {int} id - Edge id
- * @param {node} source - Edge start
- * @param {node} target - Edge end
+ * @param {string} source - Edge start
+ * @param {string} target - Edge end
  * @return edge
  */
 let createEdgeData = function (id, source, target) {
@@ -148,6 +148,7 @@ let drawGraph = function (nodes) {
   cy.add(createEdgeData("curr_pointer", "curr", "node0"));
   cy.add(createEdgeData("head_pointer", "head", "node0"));
 
+  //Layout specifications
   let options = {
     name: "preset",
     fit: true,
@@ -194,7 +195,7 @@ function highlightNode(nodeId, nodeType = "source") {
 }
 
 /**
- * Funciotn to turn highlighted node back to normal
+ * Function to toggle highlighted node back to normal
  * @param {int} nodeId - ID of node
  */
 function deHighlightNode(nodeId) {
@@ -213,7 +214,7 @@ function deHighlightNode(nodeId) {
 
 /**
  * Function to set next pointer to current's next node
- * @param {node} currNode - Current node
+ * @param {int} currNode - Current node's index
  */
 function setNextPointerToCurrentNext(currNode) {
   if (currNode === 0) {
@@ -228,7 +229,7 @@ function setNextPointerToCurrentNext(currNode) {
 
 /**
  * Function to set current node's next node to previous
- * @param {node} currNode - Current node
+ * @param {int} currNode - Current node's index
  */
 function setCurrentNextToPrevPointer(currNode) {
   let target;
@@ -244,8 +245,8 @@ function setCurrentNextToPrevPointer(currNode) {
 }
 
 /**
- * Function to set Previous node to current 
- * @param {node} currNode 
+ * Function to set Previous node to current
+ * @param {int} currNode - Current node's index
  */
 function SetPrevToCurrent(currNode) {
   let nullPos = cy.$("#NULL").position();
@@ -286,7 +287,7 @@ function SetPrevToCurrent(currNode) {
 
 /**
  * Function to set current node to next
- * @param {node} currNode - Current node
+ * @param {int} currNode - Current node's index
  */
 function SetCurrentToNext(currNode) {
   let ej = cy.$("#curr_pointer");
@@ -321,7 +322,7 @@ function setHeadToPrev() {
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
- * Function to animate the lined list reversal with code line highlighting
+ * Function to animate the linked list reversal with code line highlighting
  * Syncing line highlight with visualisation
  */
 function reversal() {
@@ -386,19 +387,21 @@ function reversal() {
     .then(() => delay(1000))
     .then(() => deHighlightNode("#head"))
     .then(() => deHighlightNode("#node" + (numberOfNodes - 1)))
-    .then( () => {
-      $('#submit').removeAttr('disabled');
+    .then(() => {
+      $("#submit").removeAttr("disabled");
     });
 }
 
 /**
  * Function to check if object is numeric or not
- * @param {Object} obj 
+ * @param {Object} obj
  * @returns {Boolean}
  */
 function isNumeric(obj) {
   var realStringObj = obj && obj.toString();
-  return !jQuery.isArray(obj) && (realStringObj - parseFloat(realStringObj) + 1) >= 0;
+  return (
+    !jQuery.isArray(obj) && realStringObj - parseFloat(realStringObj) + 1 >= 0
+  );
 }
 
 // Reset button functionality
@@ -410,14 +413,14 @@ $("#reset").click(function () {
 // Submit button functionality
 $("#submit").click(function () {
   let input = $("#customNodes").val().replace(/ /g, "").split(",");
-  for(let j=0; j<input.length;j++){
-    if(!isNumeric(input[j])){
+  for (let j = 0; j < input.length; j++) {
+    if (!isNumeric(input[j])) {
       alert("Please enter a valid number.");
       return;
     }
   }
 
-  $('#submit').attr('disabled', 'disabled');
+  $("#submit").attr("disabled", "disabled");
   customNodes = [];
   input.forEach(function (item) {
     customNodes.push(parseInt(item));
@@ -456,12 +459,12 @@ function startPage(customNodes = [10, 20, 30]) {
   next = prev;
   numberOfNodes = customNodes.length;
   animationSpeed = 1000;
-  $('#submit').attr('disabled', 'disabled');
+  $("#submit").attr("disabled", "disabled");
   setTimeout(drawGraph(customNodes), 4000);
   setTimeout(reversal, 1000);
-
 }
 
+// Initialization
 let edgeIndex;
 let prev;
 let curr;
