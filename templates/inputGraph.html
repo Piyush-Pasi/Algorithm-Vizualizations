@@ -41,6 +41,7 @@
       .main-container {
         display: flex;
         flex-direction: row;
+        height: 464px;
       }
       .formInputs {
         margin: 0 1rem;
@@ -54,13 +55,13 @@
       }
       #graph-div {
         padding: 5px;
-        margin: 0px 20px 0px 10px;
+        margin: 0px 10px 0px 10px;
         border: 1px solid blue;
         width: 40%;
       }
       #heap-div {
         padding: 5px;
-        margin-right: 20px;
+        /* margin-right: 20px; */
         border: 1px solid blue;
         width: 40%;
       }
@@ -71,10 +72,10 @@
         margin-left: 10px;
       }
       .code-container {
-        overflow: hidden;
-        margin-left: 10px;
+        /* overflow: hidden; */
+        /* margin-left: 10px; */
         font-family: Courier New, monospace;
-        font-size: 14px;
+        /* font-size: 14px; */
         font-weight: bold;
       }
       .div-info {
@@ -101,7 +102,7 @@
         margin-left: 120px;
       }
       .code-highlight {
-        background-color: rgb(160, 103, 19);
+        background-color: #f7a62e;
         transition-duration: 1s;
       }
 
@@ -132,6 +133,21 @@
 
       .invisibleDiv {
         visibility: hidden;
+      }
+
+      /* Validation styles */
+      .validation {
+        color: rgb(243, 91, 91);
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+
+        background-image: none;
+        padding: 16px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
       }
     </style>
   </head>
@@ -218,32 +234,42 @@
         </div>
 
         <div style="display: flex; flex-direction: column">
-          <div class="input-group">
-            <input
-              id="edgeWeight"
-              class="form-control mr-1"
-              placeholder="Edge weight"
-            />
+          <div style="display: flex; flex-direction: row">
+            <div class="input-group">
+              <input
+                id="edgeWeight"
+                class="form-control mr-1"
+                placeholder="Edge weight"
+              />
+            </div>
+            <div class="input-group">
+              <input
+                id="edgeSource"
+                class="form-control mr-1"
+                placeholder="Source"
+              />
+            </div>
+            <div class="input-group">
+              <input
+                id="edgeTarget"
+                class="form-control mr-1"
+                placeholder="Target"
+              />
+            </div>
           </div>
-          <div class="input-group">
-            <input
-              id="edgeSource"
-              class="form-control mr-1"
-              placeholder="Source"
-            />
+
+          <div style="display: flex; flex-direction: row">
+            <div class="input-group">
+              <button id="insertEdgeBtn" class="btn btn-primary">
+                Add Edge
+              </button>
+            </div>
+            <!-- Validation of inputs -->
+            <div class="validation" style="color: black">
+              Click on node to start dijkstra after adding edges & nodes
+            </div>
+            <div id="validity" class="validation"></div>
           </div>
-          <div class="input-group">
-            <input
-              id="edgeTarget"
-              class="form-control mr-1"
-              placeholder="Target"
-            />
-          </div>
-          <div class="input-group">
-            <button id="insertEdgeBtn" class="btn btn-primary">Add Edge</button>
-          </div>
-          <!-- Validation of inputs -->
-          <div><span id="validity" style="color: rgb(243, 91, 91)"></span></div>
         </div>
       </div>
     </div>
@@ -662,8 +688,8 @@
   // Graph -----------------------------------------------------------------------------
 
   // set graph dimensions
-  var width = 750,
-    height = 500,
+  var width = 480,
+    height = 470,
     charge = -500;
 
   // setting color
