@@ -1,5 +1,4 @@
 # Optic Algo
-A webpage to see how algorithms work with the power of visualizations.
 
 **Make your algorithm learning journey easier with Algorithm Visualizations**
 
